@@ -104,10 +104,21 @@ public class TeleOp extends OpMode {
         backRight.setPower(BackRight);
 
         if (gamepad1.cross) {
-            linearSlideHorizontal.setTargetPosition(1000);
+            linearSlideHorizontal.setTargetPosition(-1200);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
         }
+
+        if (gamepad1.circle) {
+            linearSlideHorizontal.setTargetPosition(0);
+            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideHorizontal.setPower(0.8);
+        }
+
+        // Get the current position of the armMotor
+        double linearSlideHorizontalPosition = linearSlideHorizontal.getCurrentPosition();
+
+        telemetry.addData("linearSlideHorizontal Encoder Position", linearSlideHorizontalPosition);
 
 /*
 
