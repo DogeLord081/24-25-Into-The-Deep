@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 //import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,15 +18,17 @@ public class TeleOp extends OpMode {
     protected DcMotor backLeft;
     protected DcMotor backRight;
     protected DcMotor linearActuator;
-    protected DcMotor linearSlideVertical;
     protected DcMotor linearSlideHorizontal;
+    protected DcMotor linearSlideVertical;
     protected DcMotor intake;
-    protected DcMotor intakeMovementLeft;
-    protected DcMotor intakeMovementRight;
-    private Servo mainHand;
-    private Servo clawRight;
-    private Servo clawLeft;
+    private Servo intakeMovementLeft;
+    private Servo intakeMovementRight;
     private Servo clawMovement;
+    private Servo clawLeft;
+    private Servo clawRight;
+    private Servo bucketLeft;
+    private Servo bucketRight;
+    private ColorSensor intakeColorSensor;
 
     @Override
     public void init() {
@@ -31,21 +36,31 @@ public class TeleOp extends OpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.FORWARD);
+        //frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        //backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         linearActuator = hardwareMap.get(DcMotor.class, "linearActuator");
-        mainHand = hardwareMap.get(Servo.class, "mainHand");
-        clawLeft = hardwareMap.get(Servo.class, "clawLeft");
-        clawRight = hardwareMap.get(Servo.class, "clawRight");
-
-        //      frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        //      backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
+        linearSlideHorizontal = hardwareMap.get(DcMotor.class, "linearSlideHorizontal");
+        linearSlideVertical = hardwareMap.get(DcMotor.class, "linearSlideVertical");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linearActuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linearSlideHorizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linearSlideVertical.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMovementLeft = hardwareMap.get(Servo.class, "intakeMovementLeft");
+        intakeMovementRight = hardwareMap.get(Servo.class, "intakeMovementRight");
+        clawMovement = hardwareMap.get(Servo.class, "clawMovement");
+        clawLeft = hardwareMap.get(Servo.class, "clawLeft");
+        clawRight = hardwareMap.get(Servo.class, "clawRight");
+        bucketLeft = hardwareMap.get(Servo.class, "bucketLeft");
+        bucketRight = hardwareMap.get(Servo.class, "bucketRight");
+        intakeColorSensor = hardwareMap.get(ColorSensor.class, "intakeColorSensor");
         telemetry.addData("Status", "Initialized");
-
-
     }
 
     @Override
@@ -56,23 +71,25 @@ public class TeleOp extends OpMode {
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linearActuator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        clawLeft.setDirection(Servo.Direction.REVERSE);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // clawLeft.setDirection(Servo.Direction.REVERSE);
 
 
 // Movement Code this is field centric
 
 
-        float gamepad1LeftY = -gamepad1.left_stick_y;
-        float gamepad1LeftX = gamepad1.left_stick_x;
-        float gamepad1RightX = gamepad1.right_stick_x;
+        float axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+        float lateral =  gamepad1.left_stick_x;
+        float yaw     =  gamepad1.right_stick_x;
 
-        // holonomic formulas
-
-        float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-        float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
-        float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+        // Combine the joystick requests for each axis-motion to determine each wheel's power.
+        // Set up a variable for each drive wheel to save the power level for telemetry.
+        float FrontLeft  = axial + lateral + yaw;
+        float FrontRight = axial - lateral - yaw;
+        float BackLeft   = axial - lateral + yaw;
+        float BackRight  = axial + lateral - yaw;
 
         // clip the right/left values so that the values never exceed +/- 1
         FrontRight = (float) Range.clip(FrontRight, -0.8, 0.8);
@@ -86,9 +103,15 @@ public class TeleOp extends OpMode {
         backLeft.setPower(BackLeft);
         backRight.setPower(BackRight);
 
+        if (gamepad1.cross) {
+            linearSlideHorizontal.setTargetPosition(1000);
+            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideHorizontal.setPower(0.8);
+        }
+
+/*
 
 //Linear Actuator Movement
-
 
         //Move linear actuator up and down.
         if (gamepad1.dpad_up) {
@@ -157,6 +180,7 @@ public class TeleOp extends OpMode {
             backDoorLeft.setPosition(0);
         }
 */
+/*
         if(gamepad2.cross) {
             clawLeft.setPosition(1);
             clawRight.setPosition(1);
@@ -173,7 +197,7 @@ public class TeleOp extends OpMode {
         } else if (gamepad2.left_bumper) {
 
         } else if (gamepad2.right_bumper) {
-            mainHand.setPosition(0);
+
         }
 //Truss movement
 
@@ -201,6 +225,6 @@ public class TeleOp extends OpMode {
         telemetry.addData("LinearActuator", position4);
         telemetry.update();
 
-
+*/
     }
 }
