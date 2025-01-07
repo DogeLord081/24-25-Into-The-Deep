@@ -80,23 +80,22 @@ public class TeleOp extends OpMode {
 //Telemetry
 
 
-
         // clawLeft.setDirection(Servo.Direction.REVERSE);
 
 
 // Movement Code this is field centric
 
 
-        float axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-        float lateral =  gamepad1.left_stick_x;
-        float yaw     =  gamepad1.right_stick_x;
+        float axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+        float lateral = gamepad1.left_stick_x;
+        float yaw = gamepad1.right_stick_x;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
-        float FrontLeft  = axial + lateral + yaw;
+        float FrontLeft = axial + lateral + yaw;
         float FrontRight = axial - lateral - yaw;
-        float BackLeft   = axial - lateral + yaw;
-        float BackRight  = axial + lateral - yaw;
+        float BackLeft = axial - lateral + yaw;
+        float BackRight = axial + lateral - yaw;
 
         // clip the right/left values so that the values never exceed +/- 1
         FrontRight = (float) Range.clip(FrontRight, -0.8, 0.8);
@@ -132,31 +131,43 @@ public class TeleOp extends OpMode {
         }
 
         // linearSlideVertical
-        if (gamepad1.cross) {
-            linearSlideVertical.setTargetPosition(-1800);
+        if (gamepad1.triangle) {
+            linearSlideVertical.setTargetPosition(-2572);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.square) {
-            linearSlideVertical.setTargetPosition(-1200);
+            linearSlideVertical.setTargetPosition(-2338);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
-        } else if (gamepad1.triangle) {
-            linearSlideVertical.setTargetPosition(-600);
+        } else if (gamepad1.cross) {
+            linearSlideVertical.setTargetPosition(-1649);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.circle) {
+            linearSlideVertical.setTargetPosition(-338);
+            linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideVertical.setPower(0.8);
+        } else if (gamepad1.right_bumper) {
             linearSlideVertical.setTargetPosition(0);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
-        }
 
         // intakeMovement
         if (gamepad1.dpad_down) {
             intakeMovementLeft.setPosition(0.5);
-            intakeMovementRight.setPosition(0.5);
+            intakeMovementLeft.setPosition(0.5);
         } else if (gamepad1.dpad_up) {
             intakeMovementLeft.setPosition(0.8);
             intakeMovementRight.setPosition(0.2);
+        }
+
+        // claws
+        if (gamepad1.dpad_right) {
+            clawLeft.setPosition(0.5);
+            clawRight.setPosition(0.5);
+        } else if (gamepad1.dpad_left)
+            clawLeft.setPosition(0);
+            clawRight.setPosition(1);
         }
 
         // Get the current position of the encoders
@@ -287,5 +298,5 @@ public class TeleOp extends OpMode {
         telemetry.update();
 
 */
+        }
     }
-}
