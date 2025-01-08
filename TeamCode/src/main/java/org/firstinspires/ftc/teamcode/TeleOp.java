@@ -191,6 +191,7 @@ public class TeleOp extends OpMode {
                 intakeMovementLeft.setPosition(.925);
                 intakeMovementRight.setPosition(0.085);
             }
+
 /*
         if (gamepad2.dpad_left) {
             clawLeft.setPosition(0.5);
