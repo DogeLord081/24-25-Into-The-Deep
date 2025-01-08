@@ -80,23 +80,22 @@ public class TeleOp extends OpMode {
 //Telemetry
 
 
-
         // clawLeft.setDirection(Servo.Direction.REVERSE);
 
 
 // Movement Code this is field centric
 
 
-        float axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-        float lateral =  gamepad1.left_stick_x;
-        float yaw     =  gamepad1.right_stick_x;
+        float axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+        float lateral = gamepad1.left_stick_x;
+        float yaw = gamepad1.right_stick_x;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
-        float FrontLeft  = axial + lateral + yaw;
+        float FrontLeft = axial + lateral + yaw;
         float FrontRight = axial - lateral - yaw;
-        float BackLeft   = axial - lateral + yaw;
-        float BackRight  = axial + lateral - yaw;
+        float BackLeft = axial - lateral + yaw;
+        float BackRight = axial + lateral - yaw;
 
         // clip the right/left values so that the values never exceed +/- 1
         FrontRight = (float) Range.clip(FrontRight, -0.8, 0.8);
@@ -132,43 +131,101 @@ public class TeleOp extends OpMode {
         }
 
         // linearSlideVertical
-        if (gamepad1.cross) {
-            linearSlideVertical.setTargetPosition(-1800);
+        if (gamepad1.triangle) {
+            linearSlideVertical.setTargetPosition(-2572);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.square) {
-            linearSlideVertical.setTargetPosition(-1200);
+            linearSlideVertical.setTargetPosition(-2338);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
-        } else if (gamepad1.triangle) {
-            linearSlideVertical.setTargetPosition(-600);
+        } else if (gamepad1.cross) {
+            linearSlideVertical.setTargetPosition(-1649);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.circle) {
+            linearSlideVertical.setTargetPosition(-338);
+            linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideVertical.setPower(0.8);
+        } else if (gamepad1.right_bumper) {
             linearSlideVertical.setTargetPosition(0);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         }
+        if (gamepad2.right_bumper) {
+            // Move linear actuator up (adjust as needed)
+            intake.setPower(1.0);
+        } else if (gamepad2.left_bumper ) {
+            // Move linear actuator down (adjust as needed)
+            intake.setPower(-1.0);
+        } else {
+            // Stop linear actuator
+            intake.setPower(0);}
 
-        // intakeMovement
-        if (gamepad1.dpad_down) {
-            intakeMovementLeft.setPosition(0.5);
-            intakeMovementRight.setPosition(0.5);
-        } else if (gamepad1.dpad_up) {
-            intakeMovementLeft.setPosition(0.8);
-            intakeMovementRight.setPosition(0.2);
+        if (gamepad2.dpad_up) {
+            // Move linear actuator up (adjust as needed)
+            linearActuator.setPower(1.0);
+        } else if (gamepad2.dpad_down ) {
+            // Move linear actuator down (adjust as needed)
+            linearActuator.setPower(-1.0);
+        } else {
+            // Stop linear actuator
+            linearActuator.setPower(0);}
+        /*
+        if (gamepad2.right_bumper) {
+            // Move linear actuator up (adjust as needed)
+            intake.setPower(1.0);
+        } else if (gamepad2.left_bumper ) {
+            // Move linear actuator down (adjust as needed)
+            intake.setPower(-1.0);
+        } else {
+            // Stop linear actuator
+            intake.setPower(0);}
+*/
+
+            // intakeMovement
+            if (gamepad1.dpad_down) {
+                intakeMovementLeft.setPosition(.35);
+                intakeMovementRight.setPosition(.65);
+            } else if (gamepad1.dpad_up) {
+                intakeMovementLeft.setPosition(.925);
+                intakeMovementRight.setPosition(0.085);
+            }
+/*
+        if (gamepad2.dpad_left) {
+            clawLeft.setPosition(0.5);
+            clawRight.setPosition(0.5);
+        } else if (gamepad2.dpad_right) {
+            clawLeft.setPosition(0.2);
+            clawRight.setPosition(0.8);
         }
 
-        // Get the current position of the encoders
-        double linearSlideHorizontalPosition = linearSlideHorizontal.getCurrentPosition();
-        double linearSlideVerticalPosition = linearSlideVertical.getCurrentPosition();
-        double intakeMovementLeftPosition = intakeMovementLeft.getPosition();
-        double intakeMovementRightPosition = intakeMovementRight.getPosition();
+        if (gamepad2.dpad_down) {
+            clawMovement.setPosition(0.55);
+        } else if (gamepad2.dpad_up) {
+            clawMovement.setPosition(0.9);
+        }
+*/
+        if (gamepad2.cross) {
+            bucketLeft.setPosition(0.7);
+            bucketRight.setPosition(0.3);
+        }
+        if (gamepad2.circle) {
+            bucketRight.setPosition(.98);
+            bucketLeft.setPosition(0.02);
+        }
 
-        telemetry.addData("linearSlideHorizontal Encoder Position", linearSlideHorizontalPosition);
-        telemetry.addData("linearSlideVertical Encoder Position", linearSlideVerticalPosition);
-        telemetry.addData("intakeMovementLeft Encoder Position", intakeMovementLeftPosition);
-        telemetry.addData("intakeMovementRight Encoder Position", intakeMovementRightPosition);
+
+            // Get the current position of the encoders
+            double linearSlideHorizontalPosition = linearSlideHorizontal.getCurrentPosition();
+            double linearSlideVerticalPosition = linearSlideVertical.getCurrentPosition();
+            double intakeMovementLeftPosition = intakeMovementLeft.getPosition();
+            double intakeMovementRightPosition = intakeMovementRight.getPosition();
+
+            telemetry.addData("linearSlideHorizontal Encoder Position", linearSlideHorizontalPosition);
+            telemetry.addData("linearSlideVertical Encoder Position", linearSlideVerticalPosition);
+            telemetry.addData("intakeMovementLeft Encoder Position", intakeMovementLeftPosition);
+            telemetry.addData("intakeMovementRight Encoder Position", intakeMovementRightPosition);
 
 /*
 
@@ -287,5 +344,6 @@ public class TeleOp extends OpMode {
         telemetry.update();
 
 */
+        }
     }
-}
+
