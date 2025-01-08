@@ -151,6 +151,7 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setTargetPosition(0);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
+        }
 
         // intakeMovement
         if (gamepad1.dpad_down) {
@@ -165,9 +166,18 @@ public class TeleOp extends OpMode {
         if (gamepad1.dpad_right) {
             clawLeft.setPosition(0.5);
             clawRight.setPosition(0.5);
-        } else if (gamepad1.dpad_left)
+        } else if (gamepad1.dpad_left) {
             clawLeft.setPosition(0);
             clawRight.setPosition(1);
+        }
+
+        //bucket
+        if (gamepad2.dpad_right) {
+            bucketLeft.setPosition(0.5);
+            bucketRight.setPosition(0.5);
+        } else if (gamepad2.dpad_left) {
+            bucketLeft.setPosition(0);
+            bucketRight.setPosition(1);
         }
 
         // Get the current position of the encoders
@@ -298,5 +308,5 @@ public class TeleOp extends OpMode {
         telemetry.update();
 
 */
-        }
     }
+}
