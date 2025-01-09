@@ -28,7 +28,10 @@ public class TeleOp extends OpMode {
     private Servo clawRight;
     private Servo bucketLeft;
     private Servo bucketRight;
+    private Servo hangLeft;
+    private Servo hangRight;
     private ColorSensor intakeColorSensor;
+
 
     @Override
     public void init() {
@@ -62,6 +65,8 @@ public class TeleOp extends OpMode {
         clawRight = hardwareMap.get(Servo.class, "clawRight");
         bucketLeft = hardwareMap.get(Servo.class, "bucketLeft");
         bucketRight = hardwareMap.get(Servo.class, "bucketRight");
+        hangLeft = hardwareMap.get(Servo.class, "hangLeft");
+        hangRight = hardwareMap.get(Servo.class, "hangRight");
         intakeColorSensor = hardwareMap.get(ColorSensor.class, "intakeColorSensor");
         telemetry.addData("Status", "Initialized");
 
@@ -77,6 +82,9 @@ public class TeleOp extends OpMode {
 
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setTargetPosition(0);
+
+
+
 
     }
 
@@ -130,9 +138,9 @@ public class TeleOp extends OpMode {
          */
 
         // linearSlideHorizontal
-        if (gamepad1.right_trigger != 0) {
+        if (gamepad2.right_trigger != 0) {
             linearSlideHorizontal.setPower(0.8);
-        } else if (gamepad1.left_trigger != 0) {
+        } else if (gamepad2.left_trigger != 0) {
             linearSlideHorizontal.setPower(-0.8);
         }
 
@@ -171,31 +179,56 @@ public class TeleOp extends OpMode {
 
             // intakeMovement up
             if (gamepad2.dpad_up) {
-                intakeMovementLeft.setPosition(0.1);
-                intakeMovementRight.setPosition(.9);
+                intakeMovementLeft.setPosition(0.07);
+                intakeMovementRight.setPosition(.93);
                 //intakeMovement down
             } else if (gamepad2.dpad_down) {
-                intakeMovementLeft.setPosition(0.75);
-                intakeMovementRight.setPosition(0.15);
+                intakeMovementLeft.setPosition(0.83);
+                intakeMovementRight.setPosition(0.17);
             }
+
+
+        // claw Movement
+        if (gamepad1.options) {
+            clawMovement.setDirection(Servo.Direction.REVERSE);
+            clawMovement.setPosition(.1);
+        }
+
+//hangMovement
+        if (gamepad1.share) {
+            hangLeft.setPosition(1);
+            hangRight.setPosition(0);
+        }
+
+
 
             // claws
             if (gamepad1.dpad_right) {
-                clawLeft.setPosition(0.5);
-                clawRight.setPosition(0.5);
+                clawLeft.setPosition(0.55);
+                clawRight.setPosition(0.45);
             } else if (gamepad1.dpad_left) {
-                clawLeft.setPosition(0);
-                clawRight.setPosition(1);
+                clawLeft.setPosition(.2);
+                clawRight.setPosition(.8);
             }
 
             //bucket
             if (gamepad2.dpad_right) {
-                bucketLeft.setPosition(0.5);
-                bucketRight.setPosition(0.5);
+                bucketLeft.setPosition(0.7);
+                bucketRight.setPosition(0.3);
             } else if (gamepad2.dpad_left) {
                 bucketLeft.setPosition(0);
                 bucketRight.setPosition(1);
             }
+        if (gamepad1.touchpad) {
+            // Move linear actuator up (adjust as needed)
+            linearActuator.setPower(1.0);
+        } else if (gamepad1.ps) {
+            // Move linear actuator down (adjust as needed)
+            linearActuator.setPower(-1.0);
+        } else {
+            // Stop linear actuator
+            linearActuator.setPower(0);
+        }
 
 
 
