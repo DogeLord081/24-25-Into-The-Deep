@@ -51,8 +51,10 @@ public class TeleOp extends OpMode {
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearSlideHorizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearSlideVertical.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMovementLeft = hardwareMap.get(Servo.class, "intakeMovementLeft");
         intakeMovementRight = hardwareMap.get(Servo.class, "intakeMovementRight");
         clawMovement = hardwareMap.get(Servo.class, "clawMovement");
@@ -72,6 +74,10 @@ public class TeleOp extends OpMode {
 
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intake.setTargetPosition(0);
+
     }
 
     @Override
@@ -153,44 +159,59 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setPower(0.8);
         }
 
-        // intakeMovement
-        if (gamepad1.dpad_down) {
-            intakeMovementLeft.setPosition(0.5);
-            intakeMovementLeft.setPosition(0.5);
-        } else if (gamepad1.dpad_up) {
-            intakeMovementLeft.setPosition(0.8);
-            intakeMovementRight.setPosition(0.2);
+        if (gamepad2.right_bumper) {
+            intake.setTargetPosition(-241);
+            intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            intake.setPower(0.3);
+        } else if (gamepad2.left_bumper) {
+            intake.setTargetPosition(-0);
+            intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            intake.setPower(0.3);
         }
 
-        // claws
-        if (gamepad1.dpad_right) {
-            clawLeft.setPosition(0.5);
-            clawRight.setPosition(0.5);
-        } else if (gamepad1.dpad_left) {
-            clawLeft.setPosition(0);
-            clawRight.setPosition(1);
-        }
+            // intakeMovement up
+            if (gamepad2.dpad_up) {
+                intakeMovementLeft.setPosition(0.1);
+                intakeMovementRight.setPosition(.9);
+                //intakeMovement down
+            } else if (gamepad2.dpad_down) {
+                intakeMovementLeft.setPosition(0.75);
+                intakeMovementRight.setPosition(0.15);
+            }
 
-        //bucket
-        if (gamepad2.dpad_right) {
-            bucketLeft.setPosition(0.5);
-            bucketRight.setPosition(0.5);
-        } else if (gamepad2.dpad_left) {
-            bucketLeft.setPosition(0);
-            bucketRight.setPosition(1);
-        }
+            // claws
+            if (gamepad1.dpad_right) {
+                clawLeft.setPosition(0.5);
+                clawRight.setPosition(0.5);
+            } else if (gamepad1.dpad_left) {
+                clawLeft.setPosition(0);
+                clawRight.setPosition(1);
+            }
+
+            //bucket
+            if (gamepad2.dpad_right) {
+                bucketLeft.setPosition(0.5);
+                bucketRight.setPosition(0.5);
+            } else if (gamepad2.dpad_left) {
+                bucketLeft.setPosition(0);
+                bucketRight.setPosition(1);
+            }
+
+
 
         // Get the current position of the encoders
         double linearSlideHorizontalPosition = linearSlideHorizontal.getCurrentPosition();
         double linearSlideVerticalPosition = linearSlideVertical.getCurrentPosition();
         double intakeMovementLeftPosition = intakeMovementLeft.getPosition();
         double intakeMovementRightPosition = intakeMovementRight.getPosition();
+        double intakeMovement = intake.getCurrentPosition();
+
 
         telemetry.addData("linearSlideHorizontal Encoder Position", linearSlideHorizontalPosition);
         telemetry.addData("linearSlideVertical Encoder Position", linearSlideVerticalPosition);
         telemetry.addData("intakeMovementLeft Encoder Position", intakeMovementLeftPosition);
         telemetry.addData("intakeMovementRight Encoder Position", intakeMovementRightPosition);
-
+        telemetry.addData("intake Encoder Position", intakeMovement);
 /*
 
 //Linear Actuator Movement
