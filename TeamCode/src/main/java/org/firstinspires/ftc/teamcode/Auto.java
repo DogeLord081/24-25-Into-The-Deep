@@ -91,7 +91,7 @@ public class Auto extends LinearOpMode {
         // Move back
         clawMovement.setPosition(0.7);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-800);
+        frontRight.setTargetPosition(-700);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(frontRight.isBusy() && opModeIsActive()) {
             frontRight.setPower(0.5);
@@ -139,7 +139,7 @@ public class Auto extends LinearOpMode {
         // Back more
         clawMovement.setPosition(0.7);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-250);
+        frontRight.setTargetPosition(-115);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(frontRight.isBusy() && opModeIsActive()) {
             frontRight.setPower(0.5);
@@ -168,6 +168,24 @@ public class Auto extends LinearOpMode {
         sleep(2000);
         clawLeft.setPosition(.2);
         clawRight.setPosition(.8);
+        sleep(2000);
+
+
+        // Forward
+        clawMovement.setPosition(0.7);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(200);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.5);
+            backRight.setPower(0.5);
+            frontLeft.setPower(0.5);
+            backLeft.setPower(0.5);
+        }
+        frontRight.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
         sleep(100000);
     }
 }
