@@ -85,9 +85,7 @@ public class TeleOp extends OpMode {
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake.setTargetPosition(0);
 
-
-
-
+        linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -125,25 +123,20 @@ public class TeleOp extends OpMode {
         backLeft.setPower(BackLeft);
         backRight.setPower(BackRight);
 
-        /*
         if (gamepad1.cross) {
-            linearSlideHorizontal.setTargetPosition(-1200);
-            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linearSlideHorizontal.setPower(0.8);
+            linearActuator.setPower(0.8);
+        } else if (gamepad1.circle) {
+            linearActuator.setPower(-0.8);
+        } else {
+            linearActuator.setPower(0);
         }
 
-        if (gamepad1.circle) {
-            linearSlideHorizontal.setTargetPosition(0);
-            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linearSlideHorizontal.setPower(0.8);
-        }
-         */
         if (gamepad1.options) {
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
             clawLeft.setPosition(0.55);
             clawRight.setPosition(0.45);
-            clawMovement.setPosition(0.7);
+            clawMovement.setPosition(0.55);
             hangLeft.setDirection(Servo.Direction.FORWARD);
             hangRight.setDirection(Servo.Direction.FORWARD);
             hangLeft.setPosition(0);
@@ -153,11 +146,15 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setTargetPosition(0);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
-            linearSlideHorizontal.setPower(-0.8);
+            linearSlideHorizontal.setTargetPosition(0);
+            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideHorizontal.setPower(0.8);
         }
 
         // linearSlideHorizontal
         if (gamepad2.right_trigger != 0) {
+            linearSlideHorizontal.setTargetPosition(800);
+            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
         }
 
@@ -169,6 +166,7 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.right_trigger != 0) {
+            clawMovement.setPosition(0.55);
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
             clawLeft.setPosition(0.55);
@@ -177,15 +175,17 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.left_trigger != 0) {
+            clawMovement.setPosition(0.55);
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
             linearSlideVertical.setTargetPosition(-1649);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linearSlideVertical.setPower(0.8);
+            linearSlideVertical.setPower(0.4);
         } else if (gamepad1.left_bumper) {
+            clawMovement.setPosition(0.7);
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
-            linearSlideVertical.setTargetPosition(-338);
+            linearSlideVertical.setTargetPosition(-375);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
             clawLeft.setPosition(0.55);
@@ -200,14 +200,6 @@ public class TeleOp extends OpMode {
             intake.setTargetPosition(-0);
             intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             intake.setPower(0.3);
-        } else if (gamepad1.dpad_right) {
-            while (gamepad1.dpad_right) {
-                intake.setPower(0.3);
-            }
-        } else if (gamepad1.dpad_left) {
-            while (gamepad1.dpad_left) {
-                intake.setPower(-0.3);
-            }
         }
 
         // intakeMovement up
@@ -226,7 +218,9 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setPower(0.8);
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
-            linearSlideHorizontal.setPower(-0.8);
+            linearSlideHorizontal.setTargetPosition(0);
+            linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideHorizontal.setPower(0.8);
         }
 
         // Auto transfer bucket --> high chamber

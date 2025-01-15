@@ -6,10 +6,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="Into The Deep 24-25 Auto")
-public class Auto extends LinearOpMode {
+@Autonomous(name="Into The Deep 24-25 AutoBlue")
+public class AutoBlue extends LinearOpMode {
 
     /* Declare OpMode members. */
     protected DcMotor frontLeft;
@@ -27,6 +26,8 @@ public class Auto extends LinearOpMode {
     private Servo clawRight;
     private Servo bucketLeft;
     private Servo bucketRight;
+    private Servo hangLeft;
+    private Servo hangRight;
     private ColorSensor intakeColorSensor;
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -63,6 +64,8 @@ public class Auto extends LinearOpMode {
         bucketRight = hardwareMap.get(Servo.class, "bucketRight");
         intakeColorSensor = hardwareMap.get(ColorSensor.class, "intakeColorSensor");
         telemetry.addData("Status", "Initialized");
+        hangLeft = hardwareMap.get(Servo.class, "hangLeft");
+        hangRight = hardwareMap.get(Servo.class, "hangRight");
 
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -75,29 +78,37 @@ public class Auto extends LinearOpMode {
         waitForStart();
 
         // Setup
+        hangLeft.setDirection(Servo.Direction.FORWARD);
+        hangRight.setDirection(Servo.Direction.FORWARD);
+        hangLeft.setPosition(0);
+        hangRight.setPosition(1);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        clawMovement.setPosition(0.7);
+        clawMovement.setPosition(0.55);
         intakeMovementLeft.setPosition(0.10);
         intakeMovementRight.setPosition(.90);
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
-        linearSlideHorizontal.setPower(-0.8);
-
+        linearSlideHorizontal.setTargetPosition(0);
+        linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideHorizontal.setPower(0.8);
 
         // Move back
-        clawMovement.setPosition(0.7);
+        clawMovement.setPosition(0.55);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-700);
+        frontRight.setTargetPosition(-600);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && opModeIsActive()) {
-            frontRight.setPower(0.5);
-            backRight.setPower(-0.5);
-            frontLeft.setPower(-0.5);
-            backLeft.setPower(-0.5);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setTargetPosition(-600);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.8);
+            backRight.setPower(-0.8);
+            frontLeft.setPower(0.8111);
+            backLeft.setPower(-0.8111);
         }
         frontRight.setPower(0);
         backRight.setPower(0);
@@ -125,44 +136,52 @@ public class Auto extends LinearOpMode {
         backLeft.setPower(0);
 
         // Bucket and LSV
-        clawMovement.setPosition(0.7);
+        clawMovement.setPosition(0.55);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        linearSlideVertical.setTargetPosition(-2338);
+        linearSlideVertical.setTargetPosition(-2750);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
         sleep(5000);
 
 
         // Back more
-        clawMovement.setPosition(0.7);
+        clawLeft.setPosition(0.55);
+        clawRight.setPosition(0.45);
+        clawMovement.setPosition(0.55);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-115);
+        frontRight.setTargetPosition(-20);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && opModeIsActive()) {
-            frontRight.setPower(0.5);
-            backRight.setPower(-0.5);
-            frontLeft.setPower(-0.5);
-            backLeft.setPower(-0.5);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setTargetPosition(-20);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.8);
+            backRight.setPower(-0.8);
+            frontLeft.setPower(0.8111);
+            backLeft.setPower(-0.8111);
         }
         frontRight.setPower(0);
         backRight.setPower(0);
         frontLeft.setPower(0);
         backLeft.setPower(0);
-        linearSlideVertical.setTargetPosition(-2338);
+
+        linearSlideVertical.setTargetPosition(-2750);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
 
         // LSV put down
-        clawMovement.setPosition(0.7);
+        clawLeft.setPosition(0.55);
+        clawRight.setPosition(0.45);
+        clawMovement.setPosition(0.55);
         sleep(5000);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
-        linearSlideVertical.setTargetPosition(-1649);
+        linearSlideVertical.setTargetPosition(-1600);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linearSlideVertical.setPower(0.8);
+        linearSlideVertical.setPower(0.4);
 
         // Claw release
         sleep(2000);
@@ -172,7 +191,6 @@ public class Auto extends LinearOpMode {
 
 
         // Forward
-        clawMovement.setPosition(0.7);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setTargetPosition(200);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -186,6 +204,77 @@ public class Auto extends LinearOpMode {
         backRight.setPower(0);
         frontLeft.setPower(0);
         backLeft.setPower(0);
+        sleep(1000);
+        clawMovement.setPosition(0.55);
+        linearSlideVertical.setTargetPosition(0);
+        linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideVertical.setPower(0.8);
+        sleep(2000);
+
+        // Move right
+        /*
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(2500);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.5);
+            backRight.setPower(-0.5);
+            frontLeft.setPower(-0.5);
+            backLeft.setPower(0.5);
+        }
+        frontRight.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+        sleep(500);
+
+        // Move back
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(-1300);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.5);
+            backRight.setPower(-0.5);
+            frontLeft.setPower(-0.5);
+            backLeft.setPower(-0.5);
+        }
+        frontRight.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+
+        // Move left
+        /*
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(-200);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while(frontRight.isBusy() && opModeIsActive()) {
+            frontRight.setPower(0.5);
+            backRight.setPower(0.5);
+            frontLeft.setPower(0.5);
+            backLeft.setPower(-0.5);
+        }
+         */
+        frontRight.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+        sleep(500);
+
+        // Setup
+        bucketLeft.setPosition(0);
+        bucketRight.setPosition(1);
+        clawLeft.setPosition(0.55);
+        clawRight.setPosition(0.45);
+        clawMovement.setPosition(0.55);
+        intakeMovementLeft.setPosition(0.10);
+        intakeMovementRight.setPosition(.90);
+        linearSlideVertical.setTargetPosition(0);
+        linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideVertical.setPower(0.8);
+        linearSlideHorizontal.setTargetPosition(0);
+        linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideHorizontal.setPower(0.8);
         sleep(100000);
     }
 }
