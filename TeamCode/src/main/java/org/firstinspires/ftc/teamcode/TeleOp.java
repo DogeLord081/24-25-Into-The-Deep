@@ -247,7 +247,7 @@ public class TeleOp extends OpMode {
 
         //bucket
         if (gamepad2.dpad_right) {
-            bucketLeft.setPosition(0.6);
+            bucketLeft.setPosition(0.60);
             bucketRight.setPosition(0.4);
         } else if (gamepad2.dpad_left) {
             bucketLeft.setPosition(0);
