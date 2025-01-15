@@ -131,7 +131,7 @@ public class TeleOp extends OpMode {
             linearActuator.setPower(0);
         }
 
-        if (gamepad1.options) {
+        if (gamepad1.share) {
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
             clawLeft.setPosition(0.55);
@@ -153,7 +153,7 @@ public class TeleOp extends OpMode {
 
         // linearSlideHorizontal
         if (gamepad2.right_trigger != 0) {
-            linearSlideHorizontal.setTargetPosition(800);
+            linearSlideHorizontal.setTargetPosition(950);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
         }
@@ -162,7 +162,7 @@ public class TeleOp extends OpMode {
         if (gamepad1.right_bumper) {
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
-            linearSlideVertical.setTargetPosition(-2592);
+            linearSlideVertical.setTargetPosition(-2800);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.right_trigger != 0) {
@@ -247,8 +247,8 @@ public class TeleOp extends OpMode {
 
         //bucket
         if (gamepad2.dpad_right) {
-            bucketLeft.setPosition(0.7);
-            bucketRight.setPosition(0.3);
+            bucketLeft.setPosition(0.6);
+            bucketRight.setPosition(0.4);
         } else if (gamepad2.dpad_left) {
             bucketLeft.setPosition(0);
             bucketRight.setPosition(1);
