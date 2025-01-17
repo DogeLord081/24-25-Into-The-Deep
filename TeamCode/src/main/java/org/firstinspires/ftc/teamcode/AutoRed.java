@@ -114,6 +114,7 @@ public class AutoRed extends LinearOpMode {
 
         telemetry.addData("Mode", "waiting for start");
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
+        telemetry.addData("InitAngle", getCurrentAngle());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -140,46 +141,6 @@ public class AutoRed extends LinearOpMode {
 
         // Move back
         clawMovement.setPosition(0.55);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-1800);
-        frontLeft.setTargetPosition(-1800);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
-            correction = checkDirection();
-            frontRight.setPower(power + correction);
-            backRight.setPower(-(power - correction));
-            frontLeft.setPower(-(power + correction));
-            backLeft.setPower(power - correction);
-        }
-        frontRight.setPower(0 + correction);
-        backRight.setPower(-(0 - correction));
-        frontLeft.setPower(-(0 + correction));
-        backLeft.setPower(0 - correction);
-
-        // Turn to correct
-        /*
-        clawMovement.setPosition(0.7);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-50);
-        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && opModeIsActive()) {
-            frontRight.setPower(0.5);
-            backRight.setPower(-0.5);
-            frontLeft.setPower(0.5);
-            backLeft.setPower(0.5);
-        }
-        */
-
-
-        frontRight.setPower(0);
-        backRight.setPower(0);
-        frontLeft.setPower(0);
-        backLeft.setPower(0);
-
-        // Bucket and LSV
-        clawMovement.setPosition(0.55);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
@@ -187,28 +148,32 @@ public class AutoRed extends LinearOpMode {
         linearSlideVertical.setTargetPosition(-2750);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
-        sleep(5000);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(-800);
+        frontLeft.setTargetPosition(-800);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        double targetBearing = getCurrentAngle();
+        telemetry.addData("Ah... eto...", "Bleh! >w<");
+        telemetry.update();
+        telemetry.addData("targetBearing", targetBearing);
+        telemetry.update();
+        backStraight(0);
+        driveStop();
+        sleep(2000);
 
 
         // Back more
         clawMovement.setPosition(0.55);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-20);
-        frontLeft.setTargetPosition(-20);
+        frontRight.setTargetPosition(-140);
+        frontLeft.setTargetPosition(-140);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
-            correction = checkDirection();
-            frontRight.setPower(power + correction);
-            backRight.setPower(-(power - correction));
-            frontLeft.setPower(-(power + correction));
-            backLeft.setPower(power - correction);
-        }
-        frontRight.setPower(0);
-        backRight.setPower(0);
-        frontLeft.setPower(0);
-        backLeft.setPower(0);
+        backStraight(0);
+        driveStop();
 
         linearSlideVertical.setTargetPosition(-2750);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -218,40 +183,44 @@ public class AutoRed extends LinearOpMode {
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
         clawMovement.setPosition(0.55);
-        sleep(5000);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
+        sleep(4000);
         linearSlideVertical.setTargetPosition(-1600);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.4);
+        sleep(1500);
 
         // Claw release
-        sleep(2000);
         clawLeft.setPosition(.2);
         clawRight.setPosition(.8);
-        sleep(2000);
+        sleep(500);
 
 
         // Forward
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(200);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(250);
+        frontLeft.setTargetPosition(250);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(frontRight.isBusy() && opModeIsActive()) {
-            frontRight.setPower(0.5);
-            backRight.setPower(0.5);
-            frontLeft.setPower(0.5);
-            backLeft.setPower(0.5);
-        }
-        frontRight.setPower(0);
-        backRight.setPower(0);
-        frontLeft.setPower(0);
-        backLeft.setPower(0);
-        sleep(1000);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        forwardStraight(0);
+        driveStop();
         clawMovement.setPosition(0.55);
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
-        sleep(2000);
+        sleep(500);
+
+        // Move right
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(-3000);
+        frontLeft.setTargetPosition(3000);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        strafeRight(0);
+        driveStop();
 
         // Move right
         /*
@@ -323,6 +292,88 @@ public class AutoRed extends LinearOpMode {
     /**
      * Resets the cumulative angle tracking to zero.
      */
+    private void driveStop() {
+        frontRight.setPower(0);
+        backRight.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+    }
+    private void backStraight(double targetBearing) {
+        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            double currentAngle = getCurrentAngle();
+            if (currentAngle > (targetBearing + 0.5)) {
+                frontRight.setPower(power + 0.1);
+                backRight.setPower(-power - 0.1);
+                frontLeft.setPower(power - 0.1);
+                backLeft.setPower(-power + 0.1);
+            } else if (currentAngle < (targetBearing - 0.5)) {
+                frontRight.setPower(power - 0.1);
+                backRight.setPower(-power + 0.1);
+                frontLeft.setPower(power + 0.1);
+                backLeft.setPower(-power - 0.1);
+            } else {
+                frontRight.setPower(power);
+                backRight.setPower(-power);
+                frontLeft.setPower(power);
+                backLeft.setPower(-power);
+            }
+            telemetry.addData("Ah... eto...", "Bleh! >w<");
+            telemetry.addData("targetBearing", targetBearing);
+            telemetry.addData("CurrentAngle", getCurrentAngle());
+            telemetry.update();
+        }
+    }
+
+    private void forwardStraight(double targetBearing) {
+        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            double currentAngle = getCurrentAngle();
+            if (currentAngle > (targetBearing + 0.5)) {
+                frontRight.setPower(power - 0.1);
+                backRight.setPower(power - 0.1);
+                frontLeft.setPower(power + 0.1);
+                backLeft.setPower(power + 0.1);
+            } else if (currentAngle < (targetBearing - 0.5)) {
+                frontRight.setPower(power - 0.1);
+                backRight.setPower(power + 0.1);
+                frontLeft.setPower(power + 0.1);
+                backLeft.setPower(power - 0.1);
+            } else {
+                frontRight.setPower(power);
+                backRight.setPower(power);
+                frontLeft.setPower(power);
+                backLeft.setPower(power);
+            }
+            telemetry.addData("Ah... eto...", "Bleh! >w<");
+            telemetry.addData("targetBearing", targetBearing);
+            telemetry.addData("CurrentAngle", getCurrentAngle());
+            telemetry.update();
+        }
+    }
+    private void strafeRight(double targetBearing) {
+        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            double currentAngle = getCurrentAngle();
+            if (currentAngle > (targetBearing + 0.5)) {
+                frontRight.setPower(power + 0.1);
+                backRight.setPower(power - 0.1);
+                frontLeft.setPower(power + 0.1);
+                backLeft.setPower(-power + 0.1);
+            } else if (currentAngle < (targetBearing - 0.5)) {
+                frontRight.setPower(power - 0.1);
+                backRight.setPower(power + 0.1);
+                frontLeft.setPower(power - 0.1);
+                backLeft.setPower(-power - 0.1);
+            } else {
+                frontRight.setPower(power);
+                backRight.setPower(power);
+                frontLeft.setPower(power);
+                backLeft.setPower(-power);
+            }
+            telemetry.addData("Ah... eto...", "Bleh! >w<");
+            telemetry.addData("targetBearing", targetBearing);
+            telemetry.addData("CurrentAngle", getCurrentAngle());
+            telemetry.update();
+        }
+    }
     private void resetAngle()
     {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -334,6 +385,10 @@ public class AutoRed extends LinearOpMode {
      * Get current cumulative angle rotation from last reset.
      * @return Angle in degrees. + = left, - = right.
      */
+    private double getCurrentAngle() {
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return angles.firstAngle;
+    }
     private double getAngle()
     {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
