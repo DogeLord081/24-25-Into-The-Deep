@@ -125,11 +125,12 @@ public class AutoRed extends LinearOpMode {
         hangRight.setDirection(Servo.Direction.FORWARD);
         hangLeft.setPosition(0);
         hangRight.setPosition(1);
+        sleep(1000);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        clawMovement.setPosition(0.55);
+        clawMovement.setPosition(0.65);
         intakeMovementLeft.setPosition(0.10);
         intakeMovementRight.setPosition(.90);
         linearSlideVertical.setTargetPosition(0);
@@ -140,18 +141,18 @@ public class AutoRed extends LinearOpMode {
         linearSlideHorizontal.setPower(0.8);
 
         // Move back
-        clawMovement.setPosition(0.55);
+        clawMovement.setPosition(0.65);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        linearSlideVertical.setTargetPosition(-2750);
+        linearSlideVertical.setTargetPosition(-2630);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-800);
-        frontLeft.setTargetPosition(-800);
+        frontRight.setTargetPosition(-815);
+        frontLeft.setTargetPosition(-815);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         double targetBearing = getCurrentAngle();
@@ -165,27 +166,28 @@ public class AutoRed extends LinearOpMode {
 
 
         // Back more
-        clawMovement.setPosition(0.55);
+        clawMovement.setPosition(0.65);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-140);
-        frontLeft.setTargetPosition(-140);
+        frontRight.setTargetPosition(-120);
+        frontLeft.setTargetPosition(-120);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backStraight(0);
         driveStop();
+        sleep(500);
 
-        linearSlideVertical.setTargetPosition(-2750);
+        linearSlideVertical.setTargetPosition(-2630);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
 
         // LSV put down
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        clawMovement.setPosition(0.55);
+        clawMovement.setPosition(0.65);
         bucketLeft.setPosition(0);
         bucketRight.setPosition(1);
-        sleep(4000);
+        sleep(3500);
         linearSlideVertical.setTargetPosition(-1600);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.4);
@@ -200,27 +202,54 @@ public class AutoRed extends LinearOpMode {
         // Forward
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(250);
-        frontLeft.setTargetPosition(250);
+        frontRight.setTargetPosition(355);
+        frontLeft.setTargetPosition(355);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         forwardStraight(0);
         driveStop();
-        clawMovement.setPosition(0.55);
+        sleep(500);
+        clawMovement.setPosition(0.65);
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
-        sleep(500);
 
+        /*
         // Move right
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-3000);
-        frontLeft.setTargetPosition(3000);
+        frontRight.setTargetPosition(-2450);
+        frontLeft.setTargetPosition(2450);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         strafeRight(0);
         driveStop();
+
+        // Turn right
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setTargetPosition(1850);
+        frontLeft.setTargetPosition(-1850);
+        frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turnRight();
+        driveStop();
+        sleep(500);
+
+        // Intake
+        linearSlideHorizontal.setTargetPosition(950);
+        linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideHorizontal.setPower(0.8);
+        sleep(250);
+        intakeMovementLeft.setPosition(0.83);
+        intakeMovementRight.setPosition(0.17);
+        sleep(1500);
+        intake.setTargetPosition(-241);
+        intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        intake.setPower(0.3);
+        sleep(20000);
+         */
+
 
         // Move right
         /*
@@ -270,6 +299,9 @@ public class AutoRed extends LinearOpMode {
         backRight.setPower(0);
         frontLeft.setPower(0);
         backLeft.setPower(0);
+
+        telemetry.addData("CurrentAngle", getCurrentAngle());
+        telemetry.update();
         sleep(500);
 
         // Setup
@@ -286,6 +318,10 @@ public class AutoRed extends LinearOpMode {
         linearSlideHorizontal.setTargetPosition(0);
         linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideHorizontal.setPower(0.8);
+        hangLeft.setDirection(Servo.Direction.FORWARD);
+        hangRight.setDirection(Servo.Direction.FORWARD);
+        hangLeft.setPosition(0.5);
+        hangRight.setPosition(0.5);
         sleep(100000);
     }
 
@@ -298,8 +334,38 @@ public class AutoRed extends LinearOpMode {
         frontLeft.setPower(0);
         backLeft.setPower(0);
     }
+
+    private void turnRight() {
+        while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+            frontRight.setPower(power);
+            backRight.setPower(power);
+            frontLeft.setPower(power);
+            backLeft.setPower(-power);
+        }
+    }
+
+
+    private void correction(double targetBearing) {
+        double currentAngle;
+        while ((currentAngle = getCurrentAngle()) != targetBearing) {
+            if (currentAngle > (targetBearing + 0.25)) {
+                frontRight.setPower(power - 0.1);
+                backRight.setPower(power - 0.1);
+                frontLeft.setPower(power + 0.1);
+                backLeft.setPower(power + 0.1);
+            } else if (currentAngle < (targetBearing - 0.25)) {
+                frontRight.setPower(power + 0.1);
+                backRight.setPower(power + 0.1);
+                frontLeft.setPower(power - 0.1);
+                backLeft.setPower(power - 0.1);
+            } else {
+                driveStop();
+            }
+        }
+        sleep(500);
+    }
     private void backStraight(double targetBearing) {
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+        while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             double currentAngle = getCurrentAngle();
             if (currentAngle > (targetBearing + 0.5)) {
                 frontRight.setPower(power + 0.1);
@@ -333,9 +399,9 @@ public class AutoRed extends LinearOpMode {
                 frontLeft.setPower(power + 0.1);
                 backLeft.setPower(power + 0.1);
             } else if (currentAngle < (targetBearing - 0.5)) {
-                frontRight.setPower(power - 0.1);
+                frontRight.setPower(power + 0.1);
                 backRight.setPower(power + 0.1);
-                frontLeft.setPower(power + 0.1);
+                frontLeft.setPower(power - 0.1);
                 backLeft.setPower(power - 0.1);
             } else {
                 frontRight.setPower(power);

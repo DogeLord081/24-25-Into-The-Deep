@@ -78,6 +78,10 @@ public class TeleOp extends OpMode {
 
         linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         linearSlideVertical.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linearActuator.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        linearActuator.setTargetPosition(0);
+        linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         linearSlideVertical.setTargetPosition(0);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -124,11 +128,13 @@ public class TeleOp extends OpMode {
         backRight.setPower(BackRight);
 
         if (gamepad1.cross) {
-            linearActuator.setPower(0.8);
+            linearActuator.setTargetPosition(13040);
+            linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearActuator.setPower(1);
         } else if (gamepad1.circle) {
-            linearActuator.setPower(-0.8);
-        } else {
-            linearActuator.setPower(0);
+            linearActuator.setTargetPosition(-13040);
+            linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearActuator.setPower(1);
         }
 
         if (gamepad1.share) {
@@ -149,6 +155,9 @@ public class TeleOp extends OpMode {
             linearSlideHorizontal.setTargetPosition(0);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
+        } else if (gamepad1.dpad_right) {
+            hangLeft.setPosition(1);
+            hangRight.setPosition(0);
         }
 
         // linearSlideHorizontal
@@ -275,13 +284,14 @@ public class TeleOp extends OpMode {
         double intakeMovementLeftPosition = intakeMovementLeft.getPosition();
         double intakeMovementRightPosition = intakeMovementRight.getPosition();
         double intakeMovement = intake.getCurrentPosition();
-
+        double linearActuatorPosition = linearActuator.getCurrentPosition();
 
         telemetry.addData("linearSlideHorizontal Encoder Position", linearSlideHorizontalPosition);
         telemetry.addData("linearSlideVertical Encoder Position", linearSlideVerticalPosition);
         telemetry.addData("intakeMovementLeft Encoder Position", intakeMovementLeftPosition);
         telemetry.addData("intakeMovementRight Encoder Position", intakeMovementRightPosition);
         telemetry.addData("intake Encoder Position", intakeMovement);
+        telemetry.addData("linearActuator Encoder Position", linearActuatorPosition);
 /*
 
 //Linear Actuator Movement

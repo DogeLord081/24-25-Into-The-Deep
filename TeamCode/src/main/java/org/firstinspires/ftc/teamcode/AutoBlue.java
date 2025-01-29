@@ -99,10 +99,10 @@ public class AutoBlue extends LinearOpMode {
         // Move back
         clawMovement.setPosition(0.55);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-600);
+        frontRight.setTargetPosition(-500);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setTargetPosition(-600);
+        frontLeft.setTargetPosition(-500);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             frontRight.setPower(0.8);
@@ -141,7 +141,7 @@ public class AutoBlue extends LinearOpMode {
         bucketRight.setPosition(1);
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
-        linearSlideVertical.setTargetPosition(-2750);
+        linearSlideVertical.setTargetPosition(-2660);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
         sleep(5000);
@@ -151,11 +151,12 @@ public class AutoBlue extends LinearOpMode {
         clawLeft.setPosition(0.55);
         clawRight.setPosition(0.45);
         clawMovement.setPosition(0.55);
+
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(-20);
+        frontRight.setTargetPosition(-10);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setTargetPosition(-20);
+        frontLeft.setTargetPosition(-10);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             frontRight.setPower(0.8);
@@ -163,12 +164,13 @@ public class AutoBlue extends LinearOpMode {
             frontLeft.setPower(0.8111);
             backLeft.setPower(-0.8111);
         }
+
         frontRight.setPower(0);
         backRight.setPower(0);
         frontLeft.setPower(0);
         backLeft.setPower(0);
 
-        linearSlideVertical.setTargetPosition(-2750);
+        linearSlideVertical.setTargetPosition(-2660);
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
 
@@ -275,6 +277,8 @@ public class AutoBlue extends LinearOpMode {
         linearSlideHorizontal.setTargetPosition(0);
         linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideHorizontal.setPower(0.8);
+        hangLeft.setPosition(0.5);
+        hangRight.setPosition(0.5);
         sleep(100000);
     }
 }
