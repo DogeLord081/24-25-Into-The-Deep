@@ -155,17 +155,29 @@ public class TeleOp extends OpMode {
             linearSlideHorizontal.setTargetPosition(0);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
-        } else if (gamepad1.dpad_right) {
-            hangLeft.setPosition(1);
-            hangRight.setPosition(0);
+            linearActuator.setTargetPosition(13040);
+            linearActuator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearActuator.setPower(1);
         }
+
+
+        if (gamepad2.a) {
+            bucketLeft.setPosition(.3);
+            bucketRight.setPosition(.7);
+            intakeMovementRight.setPosition(.5);
+            intakeMovementLeft .setPosition(.5);
+            linearSlideVertical.setTargetPosition(-2800);
+            linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            linearSlideVertical.setPower(1);
+        }
+
 
         // linearSlideHorizontal
         if (gamepad2.right_trigger != 0) {
             linearSlideHorizontal.setTargetPosition(950);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
-        }
+                    }
 
         // linearSlideVertical
         if (gamepad1.right_bumper) {
@@ -180,7 +192,7 @@ public class TeleOp extends OpMode {
             bucketRight.setPosition(1);
             clawLeft.setPosition(0.55);
             clawRight.setPosition(0.45);
-            linearSlideVertical.setTargetPosition(-2338);
+            linearSlideVertical.setTargetPosition(-2400);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.left_trigger != 0) {
