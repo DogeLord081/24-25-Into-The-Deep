@@ -177,7 +177,7 @@ public class TeleOp extends OpMode {
             linearSlideHorizontal.setTargetPosition(950);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
-                    }
+        }
 
         // linearSlideVertical
         if (gamepad1.right_bumper) {
