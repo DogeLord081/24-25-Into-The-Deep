@@ -39,7 +39,7 @@ public class AutoRed extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
-    double globalAngle, power = .8, correction;
+    double globalAngle, power = .8;
 
     @Override
     public void runOpMode() {
@@ -90,10 +90,10 @@ public class AutoRed extends LinearOpMode {
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
@@ -106,8 +106,7 @@ public class AutoRed extends LinearOpMode {
         telemetry.update();
 
         // make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
-        {
+        while (!isStopRequested() && !imu.isGyroCalibrated()) {
             sleep(50);
             idle();
         }
@@ -201,8 +200,8 @@ public class AutoRed extends LinearOpMode {
         // Forward
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setTargetPosition(350);
-        frontLeft.setTargetPosition(350);
+        frontRight.setTargetPosition(355);
+        frontLeft.setTargetPosition(355);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         forwardStraight(0);
@@ -236,14 +235,14 @@ public class AutoRed extends LinearOpMode {
         sleep(100);
 
         // Correction
-        correction(-180);
+        correction(180);
 
         // Intake
         linearSlideHorizontal.setTargetPosition(950);
         linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideHorizontal.setPower(0.8);
-        bucketLeft.setPosition(0.60);
-        bucketRight.setPosition(0.4);
+        bucketLeft.setPosition(0);
+        bucketRight.setPosition(1);
         sleep(250);
         intakeMovementLeft.setPosition(0.83);
         intakeMovementRight.setPosition(0.17);
@@ -284,7 +283,7 @@ public class AutoRed extends LinearOpMode {
         intake.setTargetPosition(-0);
         intake.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         intake.setPower(0.3);
-        sleep(100);
+        sleep(1500);
 
         // Into Bucket
         bucketLeft.setPosition(0);
@@ -293,7 +292,6 @@ public class AutoRed extends LinearOpMode {
         linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideVertical.setPower(0.8);
         sleep(500);
-
 
 
         sleep(20000);
@@ -392,25 +390,51 @@ public class AutoRed extends LinearOpMode {
         }
     }
 
-
     private void correction(double targetBearing) {
-        double currentAngle;
+        double currentAngle = getCurrentAngle();
+
+        // Normalize angles to be within -180 to 180 range
+        double delta1 = Math.abs(targetBearing - currentAngle);
+        double delta2 = Math.abs((-targetBearing) - currentAngle);
+        telemetry.addData("targetBearing:", targetBearing);
+        telemetry.addData("-targetBearing:", -targetBearing);
+        telemetry.addData("currentAngle:", currentAngle);
+        telemetry.addData("delta1:", delta1);
+        telemetry.addData("delta2:", delta2);
+        telemetry.update();
+        sleep(5000);
+
+        // Choose the closest target direction
+        if (delta2 < delta1) {
+            targetBearing = -targetBearing;
+
+            // Update telemetry after changing targetBearing
+            telemetry.addData("Target bearing changed to:", targetBearing);
+            telemetry.update();
+            sleep(3000);
+        }
+
+        // Correction loop
         while (Math.abs((currentAngle = getCurrentAngle()) - targetBearing) > 0.3) {
             telemetry.addData("Correction Loop", "currentAngle: " + currentAngle);
-            telemetry.addData("Target", targetBearing);
+            telemetry.addData("Target", targetBearing); // This should now display the updated value
             telemetry.addData("Diff", Math.abs(currentAngle - targetBearing));
             telemetry.update();
+
             if (currentAngle > targetBearing + 0.2) {
+                // Turn left (counterclockwise)
                 frontRight.setPower(-0.4);
                 backRight.setPower(-0.4);
                 frontLeft.setPower(0.4);
                 backLeft.setPower(0.4);
-            } else if (currentAngle < targetBearing - 0.3) {
+            } else if (currentAngle < targetBearing - 0.2) {
+                // Turn right (clockwise)
                 frontRight.setPower(0.4);
                 backRight.setPower(0.4);
                 frontLeft.setPower(-0.4);
                 backLeft.setPower(-0.4);
             } else {
+                // Stop motors
                 frontRight.setPower(0);
                 backRight.setPower(0);
                 frontLeft.setPower(0);
@@ -418,9 +442,11 @@ public class AutoRed extends LinearOpMode {
             }
             sleep(10);
         }
+
         driveStop();
         sleep(500);
     }
+
     private void backStraight(double targetBearing) {
         while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             double currentAngle = getCurrentAngle();
@@ -448,7 +474,7 @@ public class AutoRed extends LinearOpMode {
     }
 
     private void forwardStraight(double targetBearing) {
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+        while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             double currentAngle = getCurrentAngle();
             if (currentAngle > (targetBearing + 0.5)) {
                 frontRight.setPower(power - 0.1);
@@ -472,8 +498,9 @@ public class AutoRed extends LinearOpMode {
             telemetry.update();
         }
     }
+
     private void strafeRight(double targetBearing) {
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+        while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             double currentAngle = getCurrentAngle();
             if (currentAngle > (targetBearing + 0.5)) {
                 frontRight.setPower(power + 0.1);
@@ -499,7 +526,7 @@ public class AutoRed extends LinearOpMode {
     }
 
     private void strafeLeft(double targetBearing) {
-        while(frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
+        while (frontRight.isBusy() && frontLeft.isBusy() && opModeIsActive()) {
             double currentAngle = getCurrentAngle();
             if (currentAngle > (targetBearing + 0.5)) {
                 frontRight.setPower(power - 0.1);
@@ -523,8 +550,8 @@ public class AutoRed extends LinearOpMode {
             telemetry.update();
         }
     }
-    private void resetAngle()
-    {
+
+    private void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
@@ -532,14 +559,15 @@ public class AutoRed extends LinearOpMode {
 
     /**
      * Get current cumulative angle rotation from last reset.
+     *
      * @return Angle in degrees. + = left, - = right.
      */
     private double getCurrentAngle() {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle;
     }
-    private double getAngle()
-    {
+
+    private double getAngle() {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is
         // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
@@ -560,11 +588,13 @@ public class AutoRed extends LinearOpMode {
 
         return globalAngle;
     }
+}
 
     /**
      * See if we are moving in a straight line and if not return a power correction value.
      * @return Power adjustment, + is adjust left - is adjust right.
      */
+    /*
     private double checkDirection()
     {
         // The gain value determines how sensitive the correction is to direction changes.
@@ -584,3 +614,4 @@ public class AutoRed extends LinearOpMode {
         return correction;
     }
 }
+*/
