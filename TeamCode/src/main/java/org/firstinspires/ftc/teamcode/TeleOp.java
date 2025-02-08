@@ -138,8 +138,8 @@ public class TeleOp extends OpMode {
         }
 
         if (gamepad1.share) {
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             clawLeft.setPosition(0.55);
             clawRight.setPosition(0.45);
             clawMovement.setPosition(0.55);
@@ -181,15 +181,15 @@ public class TeleOp extends OpMode {
 
         // linearSlideVertical
         if (gamepad1.right_bumper) {
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             linearSlideVertical.setTargetPosition(-2800);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.right_trigger != 0) {
             clawMovement.setPosition(0.55);
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             clawLeft.setPosition(0.55);
             clawRight.setPosition(0.45);
             linearSlideVertical.setTargetPosition(-2400);
@@ -197,15 +197,15 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setPower(0.8);
         } else if (gamepad1.left_trigger != 0) {
             clawMovement.setPosition(0.55);
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             linearSlideVertical.setTargetPosition(-1649);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.4);
         } else if (gamepad1.left_bumper) {
             clawMovement.setPosition(0.6);
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             linearSlideVertical.setTargetPosition(-375);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
@@ -237,8 +237,8 @@ public class TeleOp extends OpMode {
             linearSlideVertical.setTargetPosition(0);
             linearSlideVertical.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideVertical.setPower(0.8);
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             linearSlideHorizontal.setTargetPosition(0);
             linearSlideHorizontal.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideHorizontal.setPower(0.8);
@@ -246,8 +246,8 @@ public class TeleOp extends OpMode {
 
         // Auto transfer bucket --> high chamber
         if (gamepad2.triangle) {
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
             intakeMovementLeft.setPosition(0.5);
             intakeMovementRight.setPosition(0.5);
             linearSlideVertical.setTargetPosition(-2592);
@@ -271,8 +271,8 @@ public class TeleOp extends OpMode {
             bucketLeft.setPosition(0.7);
             bucketRight.setPosition(0.3);
         } else if (gamepad2.dpad_left) {
-            bucketLeft.setPosition(.04);
-            bucketRight.setPosition(.96);
+            bucketLeft.setPosition(.05);
+            bucketRight.setPosition(.95);
         }
 
         /*
